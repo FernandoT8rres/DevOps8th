@@ -101,7 +101,7 @@ Ejemplos de tareas:
 * Documentación de la propuesta DevOps
 * Planeación de pipelines CI/CD
 
-*(Actualmente el tablero ya se encuentra creado y será poblado en las siguientes fases.)*
+*(https://villaaurora375.atlassian.net/jira/software/projects/PD/summary?atlOrigin=eyJpIjoiZjYyOWYyMjk2YjE0NDllNmJkOGU3OWU1MzFhZThiZmQiLCJwIjoiaiJ9))*
 
 ---
 
