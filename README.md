@@ -1,159 +1,150 @@
 # DevOps8th
 
-1. Introducción
+# Propuesta Comercial
 
-La transformación digital ha impulsado a las organizaciones a adoptar modelos de desarrollo de software más ágiles, automatizados y confiables. En este contexto, la metodología DevOps surge como una estrategia fundamental que integra los equipos de desarrollo (Development) y operaciones (Operations) con el objetivo de reducir los tiempos de entrega, mejorar la calidad del software y garantizar una operación estable y escalable.
+## Implementación de Metodología DevOps en la aplicación **Online Boutique**
 
-DevOps no solo representa un conjunto de herramientas, sino una cultura organizacional basada en la colaboración, la automatización, la medición constante y la mejora continua. Su implementación es especialmente relevante en aplicaciones modernas basadas en microservicios y arquitecturas cloud-native, como es el caso del proyecto Online Boutique.
+---
 
- 
+## 1. Introducción
 
-2. Descripción del Proyecto
+El presente proyecto integrador tiene como objetivo el diseño, planificación y justificación de la implementación de la metodología **DevOps** en una aplicación web de comercio electrónico basada en microservicios, utilizando herramientas de código abierto. Para este propósito se empleará **Online Boutique**, una aplicación open source desarrollada por Google, la cual está compuesta por 11 microservicios y permite a los usuarios visualizar productos, agregarlos a un carrito de compras y completar el proceso de compra.
 
-Online Boutique es una aplicación de comercio electrónico desarrollada por Google como proyecto de referencia para entornos de microservicios. Su arquitectura está compuesta por múltiples servicios independientes, cada uno implementado en diferentes lenguajes de programación como Go, Java, Python, Node.js y C#.
+Este proyecto busca aplicar las mejores prácticas aprendidas durante el curso, integrando herramientas DevOps que permitan una correcta gestión del ciclo de vida del software, desde la planeación hasta el despliegue continuo.
 
-La aplicación utiliza:
+---
 
-• Arquitectura de microservicios.
-• Comunicación mediante gRPC.
-• Contenedores Docker.
-• Orquestación con Kubernetes.
-• Entorno cloud-native.
-Este diseño permite simular un entorno real de producción empresarial, lo cual la convierte en un caso ideal para aplicar una metodología DevOps completa, desde el desarrollo hasta la operación continua.
+## 2. Objetivo del proyecto
 
- 
+### Objetivo general
 
-3. Problemática Actual sin DevOps
+Planificar y comprender de manera estructurada el flujo de trabajo necesario para implementar la metodología DevOps en una aplicación basada en microservicios, garantizando calidad, escalabilidad, seguridad y entrega continua de valor.
 
-La ausencia de una metodología DevOps en proyectos como Online Boutique genera múltiples riesgos operativos y técnicos, entre ellos:
+### Objetivos específicos
 
-• Despliegues manuales propensos a errores humanos.
-• Integraciones tardías entre módulos.
-• Falta de trazabilidad en cambios de código.
-• Baja visibilidad del rendimiento de los servicios.
-• Dificultad para detectar y corregir fallos rápidamente.
-• Escalabilidad limitada ante picos de demanda.
-• Tiempos prolongados de recuperación ante fallas (MTTR alto).
-Estas problemáticas afectan directamente la experiencia del usuario, la estabilidad del sistema y la competitividad del producto en el mercado digital.
+* Justificar la adopción de DevOps en una aplicación de comercio electrónico.
+* Organizar las tareas del proyecto mediante un tablero Kanban en Jira.
+* Definir una estrategia de control de versiones utilizando Git.
+* Establecer las bases para la integración y despliegue continuo (CI/CD).
+* Preparar el proyecto para las fases de construcción, configuración y resultados.
 
- 
+---
 
-4. Objetivo de la Implementación DevOps
+## . Descripción de la aplicación Online Boutique
 
-Implementar la metodología DevOps en Online Boutique con el propósito de:
+**Online Boutique** es una aplicación web de e-commerce de código abierto desarrollada por Google con fines demostrativos. Está diseñada bajo una arquitectura de microservicios y representa un escenario realista de una tienda en línea moderna.
 
-• Automatizar el ciclo de vida del software.
-• Garantizar entregas continuas y seguras.
-• Mejorar la calidad del código.
-• Incrementar la disponibilidad del sistema.
-• Facilitar la escalabilidad automática.
-• Reducir costos operativos.
- 
+### Características principales:
 
-5. Propuesta de Implementación DevOps
+* Arquitectura basada en **11 microservicios independientes**.
+* Comunicación entre servicios mediante APIs.
+* Funcionalidades clave de un e-commerce:
 
-La propuesta DevOps para Online Boutique se estructura en las siguientes fases:
+  * Catálogo de productos
+  * Carrito de compras
+  * Proceso de checkout
+  * Gestión de pagos simulados
+* Ideal para demostrar prácticas de **DevOps, CI/CD y microservicios**.
 
-5.1 Integración Continua (CI)
+Repositorio oficial del proyecto:
+[https://github.com/GoogleCloudPlatform/microservices-demo](https://github.com/GoogleCloudPlatform/microservices-demo)
 
-Se implementará un pipeline de CI que permita:
+---
 
-• Compilación automática del código.
-• Ejecución de pruebas unitarias y de integración.
-• Análisis de calidad con herramientas como SonarQube.
-• Validación automática antes de cada despliegue.
-Herramientas sugeridas: GitHub Actions, GitLab CI o Jenkins.
+## 4. Justificación de la metodología DevOps
 
- 
+La implementación de la metodología **DevOps** es fundamental para maximizar el potencial de una aplicación basada en microservicios como Online Boutique. A continuación, se describen las principales razones:
 
-5.2 Entrega y Despliegue Continuo (CD)
+### 4.1 Mejora en la entrega continua
 
-Se automatizará el proceso de despliegue mediante:
+DevOps permite automatizar los procesos de integración y despliegue, reduciendo el tiempo entre cambios de código y su disponibilidad en producción. En un entorno de e-commerce, esto se traduce en mejoras rápidas, corrección de errores o incorporación de nuevas funcionalidades sin afectar la experiencia del usuario.
 
-• Construcción automática de imágenes Docker.
-• Almacenamiento en un registro de contenedores.
-• Despliegue automático en Kubernetes.
-• Estrategias como rolling updates y blue-green deployments.
-Esto garantizará que cada cambio validado llegue a producción de forma rápida y segura.
+### 4.2 Escalabilidad y mantenimiento
 
- 
+Al tratarse de una arquitectura de microservicios, DevOps facilita el despliegue independiente de cada servicio, permitiendo escalar únicamente los componentes necesarios y simplificando el mantenimiento del sistema.
 
-5.3 Infraestructura como Código (IaC)
+### 4. Calidad y confiabilidad del software
 
-Se definirá toda la infraestructura mediante código utilizando herramientas como:
+Mediante la integración continua (CI), se pueden ejecutar pruebas automáticas, validaciones de código y análisis de seguridad, garantizando una mayor calidad del software y reduciendo fallos en producción.
 
-• Terraform.
-• Helm Charts.
-• Kubernetes manifests (YAML).
-Esto permitirá reproducibilidad, control de versiones y recuperación rápida ante fallos.
+### 4.4 Colaboración y visibilidad
 
- 
+DevOps promueve la colaboración entre los equipos de desarrollo y operaciones, mejorando la comunicación, la trazabilidad de cambios y la visibilidad del estado del proyecto.
 
-5.4 Monitoreo y Observabilidad
+### 4.5 Seguridad integrada
 
-Se integrarán herramientas de monitoreo para garantizar la visibilidad del sistema:
+La seguridad se incorpora desde las primeras etapas del desarrollo (DevSecOps), aplicando políticas, configuraciones seguras y controles automatizados que protegen la aplicación y sus datos.
 
-• Prometheus para métricas.
-• Grafana para visualización.
-• Alertmanager para notificaciones.
-• Jaeger o Zipkin para trazabilidad distribuida.
-Esto permitirá detectar cuellos de botella, fallos y degradación del servicio en tiempo real.
+---
 
- 
+## 5. Metodología de trabajo – Fase I: Planeación
 
-5.5 Gestión de Logs
+Durante la Fase I se establecen las bases organizativas y técnicas del proyecto.
 
-Se centralizarán los logs mediante:
+### 5.1 Gestión de tareas con Jira (Kanban)
 
-• Elasticsearch.
-• Logstash.
-• Kibana (ELK Stack).
-Facilitando auditorías, análisis de incidentes y mejora continua.
+Se utilizará un tablero **Kanban en Jira** para organizar y dar seguimiento a todas las actividades del proyecto.
 
- 
+Estados sugeridos del tablero:
 
-5.6 Seguridad DevSecOps
+* Backlog
+* Por hacer
+* En progreso
+* En revisión
+* Completado
 
-La seguridad será integrada desde el inicio:
+Ejemplos de tareas:
 
-• Escaneo de vulnerabilidades en contenedores.
-• Análisis de dependencias.
-• Gestión de secretos.
-• Control de accesos.
-Esto garantiza que la seguridad forme parte del pipeline y no sea una etapa final.
+* Análisis de la arquitectura de Online Boutique
+* Configuración inicial del repositorio Git
+* Definición de estrategia de ramificación
+* Documentación de la propuesta DevOps
+* Planeación de pipelines CI/CD
 
- 
+*(Actualmente el tablero ya se encuentra creado y será poblado en las siguientes fases.)*
 
-6. Beneficios de la Implementación
+---
 
-La adopción de DevOps en Online Boutique generará los siguientes beneficios:
+## 6. Control de versiones con Git
 
-• Reducción significativa del time-to-market.
-• Mayor estabilidad y disponibilidad del sistema.
-• Disminución de errores en producción.
-• Optimización de recursos en la nube.
-• Mejora en la experiencia del usuario final.
-• Incremento en la productividad del equipo.
-• Trazabilidad total de cambios.
-• Escalabilidad automática según demanda.
- 
+Se trabajará con un repositorio Git ya creado, el cual centralizará el código fuente, documentación y configuraciones del proyecto.
 
-7. Impacto Organizacional
+### 6.1 Estrategia de ramificación
 
-DevOps promueve una cultura colaborativa donde:
+Se propone una estrategia basada en **Git Flow simplificado**:
 
-• Los equipos trabajan de forma integrada.
-• Se eliminan los silos organizacionales.
-• Se fomenta la responsabilidad compartida.
-• Se impulsa la mejora continua.
-Esto impacta positivamente en la motivación del equipo y en la calidad del producto.
+* **main**: rama principal, contiene versiones estables del proyecto.
+* **develop**: rama de desarrollo donde se integran las nuevas funcionalidades.
+* **feature/***: ramas para el desarrollo de nuevas características o mejoras específicas.
+* **hotfix/***: ramas para corrección rápida de errores críticos.
 
- 
+Esta estrategia permite un control ordenado de cambios, facilita la colaboración y se integra de forma natural con pipelines de CI/CD.
 
-8. Conclusión
+---
 
-La implementación de la metodología DevOps en el proyecto Online Boutique representa una decisión estratégica que permite transformar un sistema tradicional en una plataforma moderna, automatizada, segura y altamente escalable. DevOps no solo mejora los procesos técnicos, sino que fortalece la cultura organizacional y eleva el nivel de competitividad del proyecto en un entorno digital cada vez más exigente.
+## 7. Herramientas utilizadas en la Fase I
 
-En conclusión, DevOps se posiciona como un pilar fundamental para garantizar la eficiencia operativa, la calidad del software y la sostenibilidad a largo plazo de Online Boutique.
+* **Git**: control de versiones del código fuente.
+* **GitHub**: alojamiento del repositorio y colaboración.
+* **Jira**: gestión de tareas y seguimiento del proyecto mediante Kanban.
+* **Online Boutique (Google)**: aplicación base open source.
 
- 
+---
+
+## 8. Alcance de la propuesta
+
+Esta propuesta comercial cubre la **Fase I: Planeación**, sentando las bases para:
+
+* La construcción de pipelines de integración y despliegue continuo.
+* La configuración de políticas de seguridad y gestión de configuraciones.
+* La ejecución del proyecto y presentación de resultados finales.
+
+---
+
+## 9. Conclusión
+
+La adopción de la metodología DevOps en la aplicación Online Boutique permite demostrar, de manera práctica, cómo las mejores prácticas de desarrollo moderno mejoran la eficiencia, calidad y seguridad de una aplicación de comercio electrónico basada en microservicios. Esta fase de planeación garantiza un entendimiento claro del flujo de trabajo y prepara el proyecto para una implementación exitosa en las siguientes etapas.
+
+---
+
+**Fase actual:** Planeación (Fase I)
