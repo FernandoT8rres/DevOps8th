@@ -1,150 +1,255 @@
-# DevOps8th
+# Online Boutique - DevOps Implementation
 
-# Propuesta Comercial
+## 🎯 Proyecto Integrador - Fase II: CI/CD
 
-## Implementación de Metodología DevOps en la aplicación **Online Boutique**
+Este proyecto implementa la metodología DevOps completa para la aplicación **Online Boutique** de Google, utilizando:
 
----
-
-## 1. Introducción
-
-El presente proyecto integrador tiene como objetivo el diseño, planificación y justificación de la implementación de la metodología **DevOps** en una aplicación web de comercio electrónico basada en microservicios, utilizando herramientas de código abierto. Para este propósito se empleará **Online Boutique**, una aplicación open source desarrollada por Google, la cual está compuesta por 11 microservicios y permite a los usuarios visualizar productos, agregarlos a un carrito de compras y completar el proceso de compra.
-
-Este proyecto busca aplicar las mejores prácticas aprendidas durante el curso, integrando herramientas DevOps que permitan una correcta gestión del ciclo de vida del software, desde la planeación hasta el despliegue continuo.
-
----
-
-## 2. Objetivo del proyecto
-
-### Objetivo general
-
-Planificar y comprender de manera estructurada el flujo de trabajo necesario para implementar la metodología DevOps en una aplicación basada en microservicios, garantizando calidad, escalabilidad, seguridad y entrega continua de valor.
-
-### Objetivos específicos
-
-* Justificar la adopción de DevOps en una aplicación de comercio electrónico.
-* Organizar las tareas del proyecto mediante un tablero Kanban en Jira.
-* Definir una estrategia de control de versiones utilizando Git.
-* Establecer las bases para la integración y despliegue continuo (CI/CD).
-* Preparar el proyecto para las fases de construcción, configuración y resultados.
+- **Terraform** para infraestructura como código
+- **Docker** para containerización
+- **Kubernetes (Minikube)** para orquestación
+- **Helm** para gestión de despliegues
+- **GitHub Actions** para CI/CD
+- **GitHub Container Registry** para almacenamiento de imágenes
 
 ---
 
-## . Descripción de la aplicación Online Boutique
+## 📋 Estructura del Proyecto
 
-**Online Boutique** es una aplicación web de e-commerce de código abierto desarrollada por Google con fines demostrativos. Está diseñada bajo una arquitectura de microservicios y representa un escenario realista de una tienda en línea moderna.
-
-### Características principales:
-
-* Arquitectura basada en **11 microservicios independientes**.
-* Comunicación entre servicios mediante APIs.
-* Funcionalidades clave de un e-commerce:
-
-  * Catálogo de productos
-  * Carrito de compras
-  * Proceso de checkout
-  * Gestión de pagos simulados
-* Ideal para demostrar prácticas de **DevOps, CI/CD y microservicios**.
-
-Repositorio oficial del proyecto:
-[https://github.com/GoogleCloudPlatform/microservices-demo](https://github.com/GoogleCloudPlatform/microservices-demo)
-
----
-
-## 4. Justificación de la metodología DevOps
-
-La implementación de la metodología **DevOps** es fundamental para maximizar el potencial de una aplicación basada en microservicios como Online Boutique. A continuación, se describen las principales razones:
-
-### 4.1 Mejora en la entrega continua
-
-DevOps permite automatizar los procesos de integración y despliegue, reduciendo el tiempo entre cambios de código y su disponibilidad en producción. En un entorno de e-commerce, esto se traduce en mejoras rápidas, corrección de errores o incorporación de nuevas funcionalidades sin afectar la experiencia del usuario.
-
-### 4.2 Escalabilidad y mantenimiento
-
-Al tratarse de una arquitectura de microservicios, DevOps facilita el despliegue independiente de cada servicio, permitiendo escalar únicamente los componentes necesarios y simplificando el mantenimiento del sistema.
-
-### 4. Calidad y confiabilidad del software
-
-Mediante la integración continua (CI), se pueden ejecutar pruebas automáticas, validaciones de código y análisis de seguridad, garantizando una mayor calidad del software y reduciendo fallos en producción.
-
-### 4.4 Colaboración y visibilidad
-
-DevOps promueve la colaboración entre los equipos de desarrollo y operaciones, mejorando la comunicación, la trazabilidad de cambios y la visibilidad del estado del proyecto.
-
-### 4.5 Seguridad integrada
-
-La seguridad se incorpora desde las primeras etapas del desarrollo (DevSecOps), aplicando políticas, configuraciones seguras y controles automatizados que protegen la aplicación y sus datos.
+```
+.
+├── terraform/                    # Infraestructura como código
+│   ├── main.tf                  # Configuración principal
+│   ├── variables.tf             # Variables de Terraform
+│   └── environments/            # Configuraciones por ambiente
+├── helm-chart/                  # Helm Chart personalizado
+│   ├── Chart.yaml              # Metadata del chart
+│   ├── values.yaml             # Valores por defecto
+│   ├── values-dev.yaml         # Valores de desarrollo
+│   ├── values-prod.yaml        # Valores de producción
+│   └── templates/              # Templates de Kubernetes
+├── .github/workflows/          # Pipelines CI/CD
+│   ├── ci-build-images.yml    # Pipeline de CI
+│   └── cd-deploy-k8s.yml      # Pipeline de CD
+├── microservices-demo/         # Código fuente de Online Boutique
+└── docs/                       # Documentación del proyecto
+```
 
 ---
 
-## 5. Metodología de trabajo – Fase I: Planeación
+## 🚀 Quick Start
 
-Durante la Fase I se establecen las bases organizativas y técnicas del proyecto.
+### Prerrequisitos
 
-### 5.1 Gestión de tareas con Jira (Kanban)
+Asegúrate de tener instalado:
 
-Se utilizará un tablero **Kanban en Jira** para organizar y dar seguimiento a todas las actividades del proyecto.
+```bash
+# Docker
+docker --version
 
-Estados sugeridos del tablero:
+# Minikube
+minikube version
 
-* Backlog
-* Por hacer
-* En progreso
-* En revisión
-* Completado
+# Kubectl
+kubectl version --client
 
-Ejemplos de tareas:
+# Helm
+helm version
 
-* Análisis de la arquitectura de Online Boutique
-* Configuración inicial del repositorio Git
-* Definición de estrategia de ramificación
-* Documentación de la propuesta DevOps
-* Planeación de pipelines CI/CD
+# Terraform
+terraform version
+```
 
-*(https://villaaurora375.atlassian.net/jira/software/projects/PD/summary?atlOrigin=eyJpIjoiZjYyOWYyMjk2YjE0NDllNmJkOGU3OWU1MzFhZThiZmQiLCJwIjoiaiJ9))*
+### 1. Iniciar Minikube
 
----
+```bash
+minikube start --cpus=4 --memory=8192 --driver=docker
+minikube status
+```
 
-## 6. Control de versiones con Git
+### 2. Aplicar Infraestructura con Terraform
 
-Se trabajará con un repositorio Git ya creado, el cual centralizará el código fuente, documentación y configuraciones del proyecto.
+```bash
+cd terraform
+terraform init
+terraform plan -var-file="environments/dev/terraform.tfvars"
+terraform apply -var-file="environments/dev/terraform.tfvars"
+```
 
-### 6.1 Estrategia de ramificación
+### 3. Desplegar con Helm
 
-Se propone una estrategia basada en **Git Flow simplificado**:
+```bash
+# Instalar Online Boutique
+helm upgrade --install online-boutique ./helm-chart \
+  --values ./helm-chart/values-dev.yaml \
+  --namespace online-boutique-dev \
+  --create-namespace
 
-* **main**: rama principal, contiene versiones estables del proyecto.
-* **develop**: rama de desarrollo donde se integran las nuevas funcionalidades.
-* **feature/***: ramas para el desarrollo de nuevas características o mejoras específicas.
-* **hotfix/***: ramas para corrección rápida de errores críticos.
+# Verificar despliegue
+kubectl get pods -n online-boutique-dev
+kubectl get services -n online-boutique-dev
+```
 
-Esta estrategia permite un control ordenado de cambios, facilita la colaboración y se integra de forma natural con pipelines de CI/CD.
+### 4. Acceder a la Aplicación
 
----
+```bash
+# Obtener URL de acceso
+minikube service frontend -n online-boutique-dev
 
-## 7. Herramientas utilizadas en la Fase I
-
-* **Git**: control de versiones del código fuente.
-* **GitHub**: alojamiento del repositorio y colaboración.
-* **Jira**: gestión de tareas y seguimiento del proyecto mediante Kanban.
-* **Online Boutique (Google)**: aplicación base open source.
-
----
-
-## 8. Alcance de la propuesta
-
-Esta propuesta comercial cubre la **Fase I: Planeación**, sentando las bases para:
-
-* La construcción de pipelines de integración y despliegue continuo.
-* La configuración de políticas de seguridad y gestión de configuraciones.
-* La ejecución del proyecto y presentación de resultados finales.
-
----
-
-## 9. Conclusión
-
-La adopción de la metodología DevOps en la aplicación Online Boutique permite demostrar, de manera práctica, cómo las mejores prácticas de desarrollo moderno mejoran la eficiencia, calidad y seguridad de una aplicación de comercio electrónico basada en microservicios. Esta fase de planeación garantiza un entendimiento claro del flujo de trabajo y prepara el proyecto para una implementación exitosa en las siguientes etapas.
+# O usar port-forward
+kubectl port-forward -n online-boutique-dev svc/frontend 8080:80
+# Abrir http://localhost:8080
+```
 
 ---
 
-**Fase actual:** Planeación (Fase I)
+## 🔄 CI/CD Pipelines
+
+### Pipeline de CI (Construcción de Imágenes)
+
+**Trigger**: Push a `main`, `develop`, o `feature/*`
+
+**Proceso**:
+1. ✅ Checkout del código
+2. ✅ Build de imágenes Docker para cada microservicio
+3. ✅ Escaneo de seguridad con Trivy
+4. ✅ Push a GitHub Container Registry
+5. ✅ Versionado automático con tags
+
+**Ubicación**: `.github/workflows/ci-build-images.yml`
+
+### Pipeline de CD (Despliegue)
+
+**Trigger**: Push a `main` o manual
+
+**Proceso**:
+1. ✅ Lint del Helm Chart
+2. ✅ Template y validación
+3. ✅ Empaquetado del chart
+4. ✅ Generación de instrucciones de despliegue
+
+**Ubicación**: `.github/workflows/cd-deploy-k8s.yml`
+
+---
+
+## 🏗️ Arquitectura de Microservicios
+
+Online Boutique consta de **11 microservicios**:
+
+| Servicio | Puerto | Lenguaje | Descripción |
+|----------|--------|----------|-------------|
+| **frontend** | 8080 | Go | Interfaz web del usuario |
+| **adservice** | 9555 | Java | Servicio de anuncios |
+| **cartservice** | 7070 | C# | Carrito de compras |
+| **checkoutservice** | 5050 | Go | Proceso de checkout |
+| **currencyservice** | 7000 | Node.js | Conversión de monedas |
+| **emailservice** | 5000 | Python | Envío de emails |
+| **paymentservice** | 50051 | Node.js | Procesamiento de pagos |
+| **productcatalogservice** | 3550 | Go | Catálogo de productos |
+| **recommendationservice** | 8080 | Python | Recomendaciones |
+| **shippingservice** | 50051 | Go | Cálculo de envío |
+| **loadgenerator** | - | Python | Generador de carga |
+
+---
+
+## 📊 Comandos Útiles
+
+### Terraform
+
+```bash
+# Ver estado actual
+terraform show
+
+# Destruir infraestructura
+terraform destroy -var-file="environments/dev/terraform.tfvars"
+
+# Formatear archivos
+terraform fmt -recursive
+```
+
+### Kubernetes
+
+```bash
+# Ver todos los recursos
+kubectl get all -n online-boutique-dev
+
+# Ver logs de un servicio
+kubectl logs -n online-boutique-dev deployment/frontend
+
+# Describir un pod
+kubectl describe pod -n online-boutique-dev <pod-name>
+
+# Escalar un servicio
+kubectl scale deployment frontend --replicas=2 -n online-boutique-dev
+```
+
+### Helm
+
+```bash
+# Ver releases instalados
+helm list -n online-boutique-dev
+
+# Ver valores aplicados
+helm get values online-boutique -n online-boutique-dev
+
+# Actualizar despliegue
+helm upgrade online-boutique ./helm-chart \
+  --values ./helm-chart/values-dev.yaml \
+  --namespace online-boutique-dev
+
+# Desinstalar
+helm uninstall online-boutique -n online-boutique-dev
+```
+
+### Minikube
+
+```bash
+# Ver dashboard
+minikube dashboard
+
+# Ver servicios
+minikube service list
+
+# Detener Minikube
+minikube stop
+
+# Eliminar cluster
+minikube delete
+```
+
+---
+
+## 📝 Documentación Adicional
+
+- [Terraform Setup](./docs/terraform-setup.md)
+- [CI Process](./docs/ci-process.md)
+- [CD Process](./docs/cd-process.md)
+- [Arquitectura](./docs/arquitectura.md)
+
+---
+
+## 🎓 Criterios de Evaluación
+
+| Criterio | Puntaje | Estado |
+|----------|---------|--------|
+| Construcción de infraestructura en Terraform | 25 | ✅ |
+| Construcción de imágenes Docker (CI) | 25 | ✅ |
+| Clúster de Kubernetes (CD) | 25 | ✅ |
+| Documentación en portafolio | 25 | 🔄 En progreso |
+
+---
+
+## 👨‍💻 Autor
+
+**Fernando Torres**
+- GitHub: [@FernandoT8rres](https://github.com/FernandoT8rres)
+- Proyecto: DevOps 8th Semester
+
+---
+
+## 📚 Referencias
+
+- [Online Boutique - Google](https://github.com/GoogleCloudPlatform/microservices-demo)
+- [Terraform Documentation](https://www.terraform.io/docs)
+- [Kubernetes Documentation](https://kubernetes.io/docs)
+- [Helm Documentation](https://helm.sh/docs)
+- [GitHub Actions](https://docs.github.com/en/actions)

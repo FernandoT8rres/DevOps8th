@@ -1,0 +1,65 @@
+{{- range $service, $config := .Values.services }}
+{{- if and $config.enabled (ne $service "frontend") (ne $service "loadgenerator") }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $service }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    app: {{ $service }}
+spec:
+  replicas: {{ $config.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $service }}
+  template:
+    metadata:
+      labels:
+        app: {{ $service }}
+    spec:
+      {{- if $.Values.serviceAccount.create }}
+      serviceAccountName: {{ include "online-boutique.serviceAccountName" $ }}
+      {{- end }}
+      securityContext:
+        {{- toYaml $.Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: {{ $service }}
+        image: {{ include "online-boutique.image" (dict "Values" $.Values "service" $service) }}
+        imagePullPolicy: {{ $.Values.global.pullPolicy }}
+        ports:
+        - containerPort: {{ $config.port }}
+          name: grpc
+        env:
+        - name: PORT
+          value: "{{ $config.port }}"
+        {{- if eq $service "cartservice" }}
+        - name: REDIS_ADDR
+          value: "redis-cart:6379"
+        {{- end }}
+        resources:
+          {{- toYaml $config.resources | nindent 10 }}
+        livenessProbe:
+          {{- if or (eq $service "emailservice") (eq $service "checkoutservice") }}
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:{{ $config.port }}"]
+          {{- else }}
+          tcpSocket:
+            port: {{ $config.port }}
+          {{- end }}
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          {{- if or (eq $service "emailservice") (eq $service "checkoutservice") }}
+          exec:
+            command: ["/bin/grpc_health_probe", "-addr=:{{ $config.port }}"]
+          {{- else }}
+          tcpSocket:
+            port: {{ $config.port }}
+          {{- end }}
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        securityContext:
+          {{- toYaml $.Values.securityContext | nindent 10 }}
+{{- end }}
+{{- end }}

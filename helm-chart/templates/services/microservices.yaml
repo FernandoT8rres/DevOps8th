@@ -1,0 +1,20 @@
+{{- range $service, $config := .Values.services }}
+{{- if and $config.enabled (ne $service "frontend") (ne $service "loadgenerator") }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $service }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    app: {{ $service }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ $service }}
+  ports:
+  - name: grpc
+    port: {{ $config.port }}
+    targetPort: {{ $config.port }}
+{{- end }}
+{{- end }}

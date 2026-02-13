@@ -1,0 +1,33 @@
+# Production environment values
+global:
+  imageTag: main
+
+namespace: online-boutique-prod
+
+services:
+  frontend:
+    replicas: 2
+    type: LoadBalancer
+  
+  adservice:
+    replicas: 2
+  
+  cartservice:
+    replicas: 2
+  
+  checkoutservice:
+    replicas: 2
+  
+  productcatalogservice:
+    replicas: 2
+  
+  loadgenerator:
+    enabled: true
+
+ingress:
+  enabled: true
+  hosts:
+    - host: online-boutique.prod.local
+      paths:
+        - path: /
+          pathType: Prefix

@@ -1,0 +1,21 @@
+{{- if .Values.services.frontend.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "online-boutique.labels" . | nindent 4 }}
+    app: frontend
+spec:
+  type: {{ .Values.services.frontend.type }}
+  selector:
+    app: frontend
+  ports:
+  - name: http
+    port: 80
+    targetPort: {{ .Values.services.frontend.port }}
+    {{- if eq .Values.services.frontend.type "NodePort" }}
+    nodePort: 30080
+    {{- end }}
+{{- end }}

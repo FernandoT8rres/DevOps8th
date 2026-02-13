@@ -1,0 +1,100 @@
+name: CD - Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+
+env:
+  HELM_VERSION: v3.13.0
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set environment
+        id: set-env
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+            echo "VALUES_FILE=values-${{ github.event.inputs.environment }}.yaml" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+            echo "VALUES_FILE=values-dev.yaml" >> $GITHUB_ENV
+          fi
+      
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: ${{ env.HELM_VERSION }}
+      
+      - name: Lint Helm Chart
+        run: |
+          helm lint ./helm-chart \
+            --values ./helm-chart/${{ env.VALUES_FILE }}
+      
+      - name: Template Helm Chart
+        run: |
+          helm template online-boutique ./helm-chart \
+            --values ./helm-chart/${{ env.VALUES_FILE }} \
+            --namespace online-boutique-${{ env.ENVIRONMENT }} \
+            --debug > /tmp/manifests.yaml
+          
+          echo "## 📋 Generated Manifests Preview" >> $GITHUB_STEP_SUMMARY
+          echo '```yaml' >> $GITHUB_STEP_SUMMARY
+          head -n 50 /tmp/manifests.yaml >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Package Helm Chart
+        run: |
+          helm package ./helm-chart \
+            --destination ./helm-packages \
+            --version 1.0.${{ github.run_number }}
+      
+      - name: Upload Helm Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: helm-chart-${{ env.ENVIRONMENT }}
+          path: ./helm-packages/*.tgz
+          retention-days: 30
+      
+      - name: Deployment Summary
+        run: |
+          echo "## ✅ CD Pipeline Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** \`${{ env.ENVIRONMENT }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Namespace:** \`online-boutique-${{ env.ENVIRONMENT }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Chart Version:** \`1.0.${{ github.run_number }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Next Steps for Local Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "# Start Minikube" >> $GITHUB_STEP_SUMMARY
+          echo "minikube start --cpus=4 --memory=8192" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "# Deploy with Helm" >> $GITHUB_STEP_SUMMARY
+          echo "helm upgrade --install online-boutique ./helm-chart \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --values ./helm-chart/${{ env.VALUES_FILE }} \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --namespace online-boutique-${{ env.ENVIRONMENT }} \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --create-namespace" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "# Access the application" >> $GITHUB_STEP_SUMMARY
+          echo "minikube service frontend -n online-boutique-${{ env.ENVIRONMENT }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY

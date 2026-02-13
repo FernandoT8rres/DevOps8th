@@ -1,0 +1,17 @@
+apiVersion: v2
+name: online-boutique
+description: A Helm chart for Online Boutique microservices e-commerce application
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - microservices
+  - ecommerce
+  - devops
+  - kubernetes
+home: https://github.com/FernandoT8rres/DevOps8th
+sources:
+  - https://github.com/GoogleCloudPlatform/microservices-demo
+maintainers:
+  - name: Fernando Torres
+    email: fernando@example.com

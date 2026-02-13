@@ -1,0 +1,16 @@
+# Development environment values
+global:
+  imageTag: develop
+
+namespace: online-boutique-dev
+
+services:
+  frontend:
+    replicas: 1
+    type: NodePort
+  
+  loadgenerator:
+    enabled: false
+
+ingress:
+  enabled: false
