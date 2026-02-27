@@ -1,6 +1,9 @@
 # Development environment values
 global:
-  imageTag: develop
+  registry: us-docker.pkg.dev
+  imagePrefix: google-samples/containers/gke/boutique
+  imageTag: v0.10.1
+  pullPolicy: IfNotPresent
 
 namespace: online-boutique-dev
 
@@ -14,3 +17,7 @@ services:
 
 ingress:
   enabled: false
+
+serviceAccount:
+  create: false
+  name: "online-boutique"
