@@ -1,0 +1,11 @@
+---
+vault_version: "1.15.6"
+vault_bin_dir: "/usr/local/bin"
+vault_config_dir: "/etc/vault.d"
+vault_data_dir: "/opt/vault/data"
+vault_user: "vault"
+vault_group: "vault"
+vault_ui: true
+vault_listener_address: "0.0.0.0:8200"
+vault_api_addr: "http://127.0.0.1:8200"
+vault_cluster_addr: "https://127.0.0.1:8201"

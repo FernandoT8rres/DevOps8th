@@ -1,255 +1,90 @@
-# Online Boutique - DevOps Implementation
+# Online Boutique - Implementación DevOps Completa (Fases I, II y III)
 
-## 🎯 Proyecto Integrador - Fase II: CI/CD
-
-Este proyecto implementa la metodología DevOps completa para la aplicación **Online Boutique** de Google, utilizando:
-
-- **Terraform** para infraestructura como código
-- **Docker** para containerización
-- **Kubernetes (Minikube)** para orquestación
-- **Helm** para gestión de despliegues
-- **GitHub Actions** para CI/CD
-- **GitHub Container Registry** para almacenamiento de imágenes
+Este proyecto representa la implementación **End-to-End** de la metodología DevOps para la aplicación web de comercio electrónico **Online Boutique** (basada en 11 microservicios), abarcando desde la planificación ágil hasta la seguridad integrada en un ciclo de vida completamente automatizado.
 
 ---
 
-## 📋 Estructura del Proyecto
+## 🎯 Visión Estratégica
+La implementación opta por los cuatro pilares fundamentales del desarrollo moderno:
+1. **Automatización del Ciclo de Vida:** CI/CD para construcción, prueba y despliegue rápido.
+2. **Escalabilidad de Microservicios:** Despliegue modular en Kubernetes.
+3. **Sinergia Dev & Ops:** Integración y repositorios limpios usando estrategias de GitFlow.
+4. **Ciberseguridad (DevSecOps):** Aislamiento de secretos y configuración automatizada con Ansible y Vault.
 
-```
+---
+
+## 📈 Fases del Proyecto
+
+### Fase I: Planeación e Introspección
+* **Gestión Ágil:** Uso de un tablero Kanban (Jira) para coordinar 23 historias/tareas (PD-1 a PD-23).
+* **Control de Versiones:** Estrategia adaptada de *Git Flow* con ramas protectoras `main`, `develop`, y subramas `feature/hotfix`.
+* **Metodología DevOps:** Fomento de la colaboración en un flujo de trabajo continuo para agilizar el proceso de *Time-to-Market*.
+
+### Fase II: Planteamiento (IaC & CI/CD)
+* **Terraform (Infraestructura como Código):** Configuración del base foundation para el orquestador (`kubernetes` / `minikube`) de manera automatizada.
+* **Integración Continua (CI):** Construcción y push dinámico de contenedores Docker hacia *GitHub Container Registry* mediante GitHub Actions.
+* **Despliegue Continuo (CD):** Empaquetado y aplicación del sistema mediante *Helm Charts* iterativos controlando los 11 microservicios con una sola actualización.
+
+### Fase III: Ejecución y Seguridad (Configuration Management)
+* **Aprovisionamiento Ansible:** Configuración declarativa e instalación automatizada de un servidor externo mediante Ansible playbooks y roles.
+* **HashiCorp Vault Externo:** Implementación de un gestor de secretos alojado en Linux/AWS (EC2) operativamente fuera del clúster de Kubernetes para prevenir brechas de seguridad.
+* **DevSecOps Vault Policies:** Autenticación de GH Actions (`vault-action`) consumiendo el motor secreto **KV V2** con un token único de corto alcance, garantizando la anonimización de contraseñas.
+
+---
+
+## 📋 Estructura del Repositorio
+
+```text
 .
-├── terraform/                    # Infraestructura como código
-│   ├── main.tf                  # Configuración principal
-│   ├── variables.tf             # Variables de Terraform
-│   └── environments/            # Configuraciones por ambiente
-├── helm-chart/                  # Helm Chart personalizado
-│   ├── Chart.yaml              # Metadata del chart
-│   ├── values.yaml             # Valores por defecto
-│   ├── values-dev.yaml         # Valores de desarrollo
-│   ├── values-prod.yaml        # Valores de producción
-│   └── templates/              # Templates de Kubernetes
-├── .github/workflows/          # Pipelines CI/CD
-│   ├── ci-build-images.yml    # Pipeline de CI
-│   └── cd-deploy-k8s.yml      # Pipeline de CD
-├── microservices-demo/         # Código fuente de Online Boutique
-└── docs/                       # Documentación del proyecto
+├── .github/workflows/          # Pipelines CI/CD automatizados (build y deploy)
+├── ansible/                    # Configuration management
+│   ├── roles/vault/            # Automatización de Vault server
+│   ├── inventory.ini           # Configuración de los hosts objetivo (EC2)
+│   └── playbook.yml            # Orquestador del aprovisionamiento
+├── docs/                       # Documentación técnica, anexos y reportes
+├── helm-chart/                 # Helm Chart maestro para los microservicios
+├── microservices-demo/         # Código fuente multilingüe de Online Boutique
+└── terraform/                  # Definición de infraestructura
 ```
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Puesta en Marcha
 
-### Prerrequisitos
-
-Asegúrate de tener instalado:
-
-```bash
-# Docker
-docker --version
-
-# Minikube
-minikube version
-
-# Kubectl
-kubectl version --client
-
-# Helm
-helm version
-
-# Terraform
-terraform version
-```
-
-### 1. Iniciar Minikube
-
+### 1. Levantar Clúster Local
 ```bash
 minikube start --cpus=4 --memory=8192 --driver=docker
-minikube status
 ```
 
-### 2. Aplicar Infraestructura con Terraform
-
+### 2. Infraestructura Terraform
 ```bash
 cd terraform
 terraform init
-terraform plan -var-file="environments/dev/terraform.tfvars"
 terraform apply -var-file="environments/dev/terraform.tfvars"
 ```
 
-### 3. Desplegar con Helm
-
+### 3. Aprovisionamiento EC2 del Vault Security (Ansible)
+Edita la IP en `ansible/inventory.ini` y ejecuta el aprovisionamiento para el gestor de secretos:
 ```bash
-# Instalar Online Boutique
+ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
+```
+Para inicializar el motor Vault y asignar la política CI/CD automáticamente, corre:
+```bash
+VAULT_ADDR=http://<IP-EC2>:8200 bash ansible/vault-init.sh
+```
+
+### 4. Despliegue de Helm Local
+```bash
 helm upgrade --install online-boutique ./helm-chart \
   --values ./helm-chart/values-dev.yaml \
   --namespace online-boutique-dev \
   --create-namespace
-
-# Verificar despliegue
-kubectl get pods -n online-boutique-dev
-kubectl get services -n online-boutique-dev
 ```
-
-### 4. Acceder a la Aplicación
-
-```bash
-# Obtener URL de acceso
-minikube service frontend -n online-boutique-dev
-
-# O usar port-forward
-kubectl port-forward -n online-boutique-dev svc/frontend 8080:80
-# Abrir http://localhost:8080
-```
-
----
-
-## 🔄 CI/CD Pipelines
-
-### Pipeline de CI (Construcción de Imágenes)
-
-**Trigger**: Push a `main`, `develop`, o `feature/*`
-
-**Proceso**:
-1. ✅ Checkout del código
-2. ✅ Build de imágenes Docker para cada microservicio
-3. ✅ Escaneo de seguridad con Trivy
-4. ✅ Push a GitHub Container Registry
-5. ✅ Versionado automático con tags
-
-**Ubicación**: `.github/workflows/ci-build-images.yml`
-
-### Pipeline de CD (Despliegue)
-
-**Trigger**: Push a `main` o manual
-
-**Proceso**:
-1. ✅ Lint del Helm Chart
-2. ✅ Template y validación
-3. ✅ Empaquetado del chart
-4. ✅ Generación de instrucciones de despliegue
-
-**Ubicación**: `.github/workflows/cd-deploy-k8s.yml`
-
----
-
-## 🏗️ Arquitectura de Microservicios
-
-Online Boutique consta de **11 microservicios**:
-
-| Servicio | Puerto | Lenguaje | Descripción |
-|----------|--------|----------|-------------|
-| **frontend** | 8080 | Go | Interfaz web del usuario |
-| **adservice** | 9555 | Java | Servicio de anuncios |
-| **cartservice** | 7070 | C# | Carrito de compras |
-| **checkoutservice** | 5050 | Go | Proceso de checkout |
-| **currencyservice** | 7000 | Node.js | Conversión de monedas |
-| **emailservice** | 5000 | Python | Envío de emails |
-| **paymentservice** | 50051 | Node.js | Procesamiento de pagos |
-| **productcatalogservice** | 3550 | Go | Catálogo de productos |
-| **recommendationservice** | 8080 | Python | Recomendaciones |
-| **shippingservice** | 50051 | Go | Cálculo de envío |
-| **loadgenerator** | - | Python | Generador de carga |
-
----
-
-## 📊 Comandos Útiles
-
-### Terraform
-
-```bash
-# Ver estado actual
-terraform show
-
-# Destruir infraestructura
-terraform destroy -var-file="environments/dev/terraform.tfvars"
-
-# Formatear archivos
-terraform fmt -recursive
-```
-
-### Kubernetes
-
-```bash
-# Ver todos los recursos
-kubectl get all -n online-boutique-dev
-
-# Ver logs de un servicio
-kubectl logs -n online-boutique-dev deployment/frontend
-
-# Describir un pod
-kubectl describe pod -n online-boutique-dev <pod-name>
-
-# Escalar un servicio
-kubectl scale deployment frontend --replicas=2 -n online-boutique-dev
-```
-
-### Helm
-
-```bash
-# Ver releases instalados
-helm list -n online-boutique-dev
-
-# Ver valores aplicados
-helm get values online-boutique -n online-boutique-dev
-
-# Actualizar despliegue
-helm upgrade online-boutique ./helm-chart \
-  --values ./helm-chart/values-dev.yaml \
-  --namespace online-boutique-dev
-
-# Desinstalar
-helm uninstall online-boutique -n online-boutique-dev
-```
-
-### Minikube
-
-```bash
-# Ver dashboard
-minikube dashboard
-
-# Ver servicios
-minikube service list
-
-# Detener Minikube
-minikube stop
-
-# Eliminar cluster
-minikube delete
-```
-
----
-
-## 📝 Documentación Adicional
-
-- [Terraform Setup](./docs/terraform-setup.md)
-- [CI Process](./docs/ci-process.md)
-- [CD Process](./docs/cd-process.md)
-- [Arquitectura](./docs/arquitectura.md)
-
----
-
-## 🎓 Criterios de Evaluación
-
-| Criterio | Puntaje | Estado |
-|----------|---------|--------|
-| Construcción de infraestructura en Terraform | 25 | ✅ |
-| Construcción de imágenes Docker (CI) | 25 | ✅ |
-| Clúster de Kubernetes (CD) | 25 | ✅ |
-| Documentación en portafolio | 25 | 🔄 En progreso |
 
 ---
 
 ## 👨‍💻 Autor
-
 **Fernando Torres**
-- GitHub: [@FernandoT8rres](https://github.com/FernandoT8rres)
-- Proyecto: DevOps 8th Semester
-
----
-
-## 📚 Referencias
-
-- [Online Boutique - Google](https://github.com/GoogleCloudPlatform/microservices-demo)
-- [Terraform Documentation](https://www.terraform.io/docs)
-- [Kubernetes Documentation](https://kubernetes.io/docs)
-- [Helm Documentation](https://helm.sh/docs)
-- [GitHub Actions](https://docs.github.com/en/actions)
+* GitHub: [@FernandoT8rres](https://github.com/FernandoT8rres)
+* Estado Académico: Finalizado con 100% de Tareas Kanban Completadas (23/23).
+* Proyecto: Integrador de Metodología DevOps 8th Semester

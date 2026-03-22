@@ -1,0 +1,6 @@
+---
+- name: Provisión y Configuración de Vault Server
+  hosts: vault_server
+  become: yes
+  roles:
+    - vault
