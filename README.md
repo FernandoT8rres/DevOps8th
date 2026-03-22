@@ -83,6 +83,24 @@ helm upgrade --install online-boutique ./helm-chart \
 
 ---
 
+## 🛠️ Troubleshooting y Arquitectura (Local vs Cloud)
+
+Durante el despliegue del proyecto, se identificaron y documentaron interesantes retos de arquitectura de hardware (CPU) y dimensionamiento, evidenciados a continuación para futuras auditorías técnicas:
+
+### 1. Incompatibilidad de Arquitecturas (`exec format error`)
+Al intentar encender e interactuar con la tienda localmente en el clúster usando una computadora **Mac con Apple Silicon (M1/M2/M3 - Arquitectura `arm64`)**, los contenedores de Google entraron en estado de fallo constante (`CrashLoopBackOff`) mostrando el código de salida `255` y el error `exec format error` en los logs de Kubernetes.
+* **Causa:** Las imágenes de demostración de _Online Boutique_ de Google se distribuyen compiladas estáticamente para procesadores **Intel/AMD (`amd64`)**. Al intentar ejecutarse en el núcleo ARM del portátil, el procesador rechaza los binarios por incompatibilidad de lenguaje de máquina.
+* **Estrategias DevOps Correctivas Identificadas:** 
+  1. **Reconstrucción Nativa (Local):** Descargar el código fuente en la carpeta `microservices-demo/` y realizar un `docker build` de los 11 servicios en el equipo destino. Genera imágenes 100% nativas `arm64` a un alto costo de tiempo de compilación.
+  2. **Refactor a Multi-Arch:** Refactorizar nuestras referencias de Helm hacia contenedores modernos que el mantenedor haya actualizado al formato universal Multi-Arquitectura.
+  3. **Cloud Native puro (Solución seleccionada):** Aprovechar nuestro Pipeline CI/CD (`cd-deploy-k8s.yml`) para realizar el despliegue real directmente en un clúster administrado en la nube (como **AWS EKS** o GKE), cuyos robustos servidores proveen núcleos nativos Intel/Linux (`amd64`), haciendo que los contenedores enciendan limpia e inmediatamente.
+
+### 2. Dimensionamiento de Nodos y Aislamiento de Vault (OOM)
+* **Decisión de Diseño de Fase III:** La instancia aprovisionada en AWS EC2 de capa gratuita (`18.222.251.78`, tipo `t3.micro` con 1 vCPU y 1 GB RAM) se dedicó **exclusivamente** para alojar nuestro servidor robusto de Ciberseguridad administrado por Ansible (**HashiCorp Vault**).
+* **Prevención del Colapso:** Desplegar los 11 microservicios y bases de datos (`Redis`, `Frontend`, `Cart`, etc.) dentro de la misma máquina EC2 hubiera decantado en un estrangulamiento de hardware y colapso total por falta de memoria (`OOMKilled`), puesto que la aplicación requiere de un mínimo recomendado de 4 GB de RAM. Esta observación justifica nuestra decisión DevOps de mantener aislado Vault externamente para servir al clúster principal mediante APIs.
+
+---
+
 ## 👨‍💻 Autor
 **Fernando Torres**
 * GitHub: [@FernandoT8rres](https://github.com/FernandoT8rres)
